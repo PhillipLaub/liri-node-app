@@ -1,6 +1,6 @@
 require("dotenv").config();
 var keys = require("./keys");
-var Spotify = require('node-spotify-api'); //Using the Spotify api and getting the key from keys.js
+var Spotify = require('node-spotify-api'); 
 var spotify = new Spotify(keys.spotify);
 
 // Make it so liri.js can take in one of the following commands:
@@ -28,8 +28,9 @@ switch( process.argv[2] ){
     case "do-what-it-says":
         break;
     default:
-        console.log("Please enter an argument dude")
-        
+        console.log("--------------------------------------------------------");
+        console.log("Please enter a valid argument, such as:\n\nnode liri.js movie-this [MOVIE TITLE]\n\nnode liri.js spotify-this-song [SONG TITLE]")
+        console.log("--------------------------------------------------------\n\n");
 }
 //put API calls in functions, then call functions inside switch statements
 

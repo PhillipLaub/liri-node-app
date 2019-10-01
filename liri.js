@@ -1,6 +1,7 @@
 require("dotenv").config();
 var keys = require("./keys");
-
+var Spotify = require('node-spotify-api'); //Using the Spotify api and getting the key from keys.js
+var spotify = new Spotify(keys.spotify);
 
 // Make it so liri.js can take in one of the following commands:
 // concert-this
@@ -19,9 +20,10 @@ switch( process.argv[2] ){
         console.log("concert thissss")
         break;
     case "spotify-this-song":
+        runSpotify();
         break;
     case "movie-this":
-        omdb();
+        runOmdb();
         break;
     case "do-what-it-says":
         break;
@@ -31,7 +33,7 @@ switch( process.argv[2] ){
 }
 //put API calls in functions, then call functions inside switch statements
 
-function omdb() {
+function runOmdb() {
     var movieName = "";
     var nodeArgs = process.argv;
 // Create an empty variable for holding the movie name
@@ -61,6 +63,7 @@ var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey
 
 axios.get(queryUrl).then(
   function(response) {
+    console.log("-----------------------------------------------------------");
     console.log("Title: " + response.data.Title);
     console.log("Release Year: " + response.data.Year);
     console.log("Ratings: " + response.data.Ratings[0].Source + ": " + response.data.Ratings[0].Value);
@@ -68,6 +71,7 @@ axios.get(queryUrl).then(
     console.log("Language: " + response.data.Language);
     console.log("Plot: " + response.data.Plot);
     console.log("Actors: " + response.data.Actors);
+    console.log("-----------------------------------------------------------");
 
  
   })
@@ -92,4 +96,41 @@ axios.get(queryUrl).then(
     console.log(error.config);
   });
 
+}
+
+function runSpotify() {
+  
+  var songName = "";
+  var nodeArgs = process.argv;
+// Create an empty variable for holding the movie name
+if (!process.argv[3]) {
+    songName = "The Sign";
+}
+
+// Loop through all the words in the node argument
+// And do a little for-loop magic to handle the inclusion of "+"s
+for (var i = 3; i < nodeArgs.length; i++) {
+
+  if (i > 3 && i < nodeArgs.length) {
+    songName = songName + "+" + nodeArgs[i];
+  } else {
+    songName += nodeArgs[i];
+
+  }
+}
+
+  spotify
+  .search({ type: 'track', query: songName })
+  .then(function(response) {         
+          console.log("-----------------------------------------------------------");
+          console.log("Artist: " + response.tracks.items[0].artists[0].name);
+          console.log("Song Name: " + response.tracks.items[0].name);
+          console.log("Album Name: " + response.tracks.items[0].album.name);
+          console.log("Preview Link: " + response.tracks.items[0].preview_url);
+          console.log("-----------------------------------------------------------");
+      
+  })
+  .catch(function(err) {
+      console.log(err);
+  });
 }

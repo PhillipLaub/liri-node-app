@@ -6,9 +6,13 @@ var spotify = new Spotify(keys.spotify);
 var moment = require('moment'); 
 moment().format();
 
+var fs = require("fs");
+
+let action = process.argv[2];
+
 // Make it so liri.js can take in one of the following commands:
 // concert-this
-// spotify-this-song
+// spotify-this-song 
 // movie-this
 // do-what-it-says
 
@@ -18,7 +22,7 @@ moment().format();
 var axios = require("axios");
 
 // Store all of the arguments in an array
-switch( process.argv[2] ){
+switch(action){
     case "concert-this":
         runBandsInTown()
         break;
@@ -29,10 +33,11 @@ switch( process.argv[2] ){
         runOmdb();
         break;
     case "do-what-it-says":
+        runRandom();
         break;
     default:
         console.log("\n--------------------------------------------------------");
-        console.log("Please enter a valid argument, such as:\n\nnode liri.js movie-this [MOVIE TITLE]\n\nnode liri.js spotify-this-song [SONG TITLE]\n\nnode liri.js concert-this [ARTIST NAME]")
+        console.log("Please enter a valid argument, such as:\n\nnode liri.js movie-this [MOVIE TITLE]\n\nnode liri.js spotify-this-song [SONG TITLE]\n\nnode liri.js concert-this [ARTIST NAME]\n\nnode liri.js do-what-it-says")
         console.log("--------------------------------------------------------\n\n");
 }
 //put API calls in functions, then call functions inside switch statements
@@ -41,10 +46,10 @@ function runOmdb() {
     var movieName = "";
     var nodeArgs = process.argv;
 // Create an empty variable for holding the movie name
-if (!process.argv[3]) {
-    movieName = "Mr.Nobody";
-}
 
+if (!process.argv[3]) {
+  movieName = "Mr.Nobody";
+}
 
 
 // Loop through all the words in the node argument
@@ -59,6 +64,8 @@ for (var i = 3; i < nodeArgs.length; i++) {
   }
 }
 
+
+
 // Then run a request with axios to the OMDB API with the movie specified
 var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
@@ -66,12 +73,9 @@ var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey
 // console.log(queryUrl);
 
 axios.get(queryUrl).then(
-  function(response, movieName) {
-    if (movieName = "Mr.Nobody") {
-      console.log("\n--------------------------------------------------------");
-      console.log("\nIf you haven't watched Mr. Nobody, then you should: http://www.imdb.com/title/tt0485947/");
-      console.log("It's on Netflix!");
-
+  function(response) {
+    if (movieName !== "Mr.Nobody") {
+      
       console.log("\n--------------------------OMDB--------------------------");
       console.log("Title: " + response.data.Title);
       console.log("Release Year: " + response.data.Year);
@@ -83,6 +87,11 @@ axios.get(queryUrl).then(
       console.log("--------------------------------------------------------\n\n");
     }
     else {
+      console.log("\n--------------------------------------------------------");
+      console.log("\nIf you haven't watched Mr. Nobody, then you should: http://www.imdb.com/title/tt0485947/");
+      console.log("It's on Netflix!");
+
+
       console.log("\n\n--------------------------OMDB--------------------------");
       console.log("Title: " + response.data.Title);
       console.log("Release Year: " + response.data.Year);
@@ -121,7 +130,7 @@ axios.get(queryUrl).then(
 }
 
 function runSpotify() {
-  
+
   var songName = "";
   var nodeArgs = process.argv;
   
@@ -248,5 +257,18 @@ function(response) {
   }
   console.log(error.config);
 });
+
+}
+
+function runRandom() {
+  
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+        return console.log(error);
+    }
+    var dataArr = data.split(',');
+    console.log(dataArr[1])
+    runSpotify(dataArr[1]);
+})
 
 }

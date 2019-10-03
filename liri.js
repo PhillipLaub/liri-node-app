@@ -28,12 +28,24 @@ function UserInputs(action, input) {
   switch (action) {
     case "concert-this":
       runBandsInTown(input);
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", action);
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", input);
       break;
     case "spotify-this-song":
       runSpotify(input);
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", action);
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", input);
       break;
     case "movie-this":
       runOmdb(input);
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", action);
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", input);
       break;
     case "do-what-it-says":
       runRandom(input);

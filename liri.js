@@ -28,24 +28,15 @@ function UserInputs(action, input) {
   switch (action) {
     case "concert-this":
       runBandsInTown(input);
-      fs.appendFileSync("random.txt", ",");
-      fs.appendFileSync("random.txt", action);
-      fs.appendFileSync("random.txt", ",");
-      fs.appendFileSync("random.txt", input);
+      fixString(input)
       break;
     case "spotify-this-song":
       runSpotify(input);
-      fs.appendFileSync("random.txt", ",");
-      fs.appendFileSync("random.txt", action);
-      fs.appendFileSync("random.txt", ",");
-      fs.appendFileSync("random.txt", input);
+      fixString(input)
       break;
     case "movie-this":
       runOmdb(input);
-      fs.appendFileSync("random.txt", ",");
-      fs.appendFileSync("random.txt", action);
-      fs.appendFileSync("random.txt", ",");
-      fs.appendFileSync("random.txt", input);
+      fixString(input)
       break;
     case "do-what-it-says":
       runRandom(input);
@@ -316,4 +307,20 @@ function runRandom(input) {
     //build function for passing these into switch function
     UserInputs(dataArr[0], dataArr[1]);
   });
+}
+
+function fixString(input) {
+  var nodeArgs = process.argv;
+
+  for (var i = 3; i < nodeArgs.length; i++) {
+    if (i > 3 && i < nodeArgs.length) {
+      input = input + " " + nodeArgs[i];
+    } 
+    
+  }
+      fs.appendFileSync("random.txt", "\n")
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", action);
+      fs.appendFileSync("random.txt", ",");
+      fs.appendFileSync("random.txt", input);
 }

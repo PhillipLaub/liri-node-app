@@ -9,6 +9,8 @@ moment().format();
 var fs = require("fs");
 
 let action = process.argv[2];
+let input = process.argv[3];
+
 
 // Make it so liri.js can take in one of the following commands:
 // concert-this
@@ -24,16 +26,16 @@ var axios = require("axios");
 // Store all of the arguments in an array
 switch(action){
     case "concert-this":
-        runBandsInTown()
+        runBandsInTown(input)
         break;
     case "spotify-this-song":
-        runSpotify();
+        runSpotify(input);
         break;
     case "movie-this":
-        runOmdb();
+        runOmdb(input);
         break;
     case "do-what-it-says":
-        runRandom();
+        runRandom(input);
         break;
     default:
         console.log("\n--------------------------------------------------------");
@@ -42,13 +44,13 @@ switch(action){
 }
 //put API calls in functions, then call functions inside switch statements
 
-function runOmdb() {
+function runOmdb(input) {
     var movieName = "";
     var nodeArgs = process.argv;
 // Create an empty variable for holding the movie name
 
 if (!process.argv[3]) {
-  movieName = "Mr.Nobody";
+  input = "Mr.Nobody";
 }
 
 
@@ -58,8 +60,10 @@ for (var i = 3; i < nodeArgs.length; i++) {
 
   if (i > 3 && i < nodeArgs.length) {
     movieName = movieName + "+" + nodeArgs[i];
+    input = movieName;
   } else {
     movieName += nodeArgs[i];
+    input=movieName;
 
   }
 }
@@ -67,14 +71,14 @@ for (var i = 3; i < nodeArgs.length; i++) {
 
 
 // Then run a request with axios to the OMDB API with the movie specified
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+var queryUrl = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
 
 // This line is just to help us debug against the actual URL.
 // console.log(queryUrl);
 
 axios.get(queryUrl).then(
   function(response) {
-    if (movieName !== "Mr.Nobody") {
+    if (input !== "Mr.Nobody") {
       
       console.log("\n--------------------------OMDB--------------------------");
       console.log("Title: " + response.data.Title);
@@ -129,27 +133,29 @@ axios.get(queryUrl).then(
 
 }
 
-function runSpotify() {
+function runSpotify(input) {
 
   var songName = "";
   var nodeArgs = process.argv;
   
 if (!process.argv[3]) {
-    songName = "The Sign";
+    input = "The Sign";
 }
 
 for (var i = 3; i < nodeArgs.length; i++) {
 
   if (i > 3 && i < nodeArgs.length) {
     songName = songName + "+" + nodeArgs[i];
+    input = songName;
   } else {
     songName += nodeArgs[i];
+    input=songName;
 
   }
 }
 
   spotify
-  .search({ type: 'track', query: songName })
+  .search({ type: 'track', query: input })
   .then(function(response) {         
           console.log("\n\n-------------------------SPOTIFY----------------------------");
           console.log("Artist: " + response.tracks.items[0].artists[0].name);
@@ -181,12 +187,12 @@ for (var i = 3; i < nodeArgs.length; i++) {
   });
 }
 
-function runBandsInTown() {
+function runBandsInTown(input) {
   var artist = "";
   var nodeArgs = process.argv;
 
 if (!process.argv[3]) {
-  artist = "Eminem";
+  input = "Eminem";
 }
 
 
@@ -194,13 +200,15 @@ for (var i = 3; i < nodeArgs.length; i++) {
 
 if (i > 3 && i < nodeArgs.length) {
   artist = artist + "+" + nodeArgs[i];
+  input=artist;
 } else {
   artist += nodeArgs[i];
+  input=artist;
 
 }
 }
 
-var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
+var queryUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp"
 
 // This line is just to help us debug against the actual URL.
 // console.log(queryUrl);
@@ -260,7 +268,7 @@ function(response) {
 
 }
 
-function runRandom() {
+function runRandom(input) {
   
   fs.readFile("random.txt", "utf8", function(error, data) {
     if (error) {

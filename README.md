@@ -9,4 +9,10 @@ Contain a link to a deployed version of the app
 Clearly list the technologies used in the app
 State your role in the app development
 
-![LIRI_concert-this](./Screenshots/LIRI_concert-this)
+![LIRI_concert-this](https://github.com/PhillipLaub/liri-node-app/blob/master/Screenshots/LIRI_concert-this.png)
+
+![LIRI_movie-this](https://github.com/PhillipLaub/liri-node-app/blob/master/Screenshots/LIRI_movie-this.png)
+
+![LIRI_spotify-this-song](https://github.com/PhillipLaub/liri-node-app/blob/master/Screenshots/LIRI_spotify-this-song.png)
+
+![LIRI_default&do-what-it-says](https://github.com/PhillipLaub/liri-node-app/blob/master/Screenshots/LIRI_default&do-what-it-says.png)
